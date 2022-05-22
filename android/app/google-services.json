@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "907774283410",
+    "firebase_url": "https://flutter-varios-6557c-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "flutter-varios-6557c",
+    "storage_bucket": "flutter-varios-6557c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907774283410:android:9c3efcfaf330025214e04b",
+        "android_client_info": {
+          "package_name": "com.dmatilla.products_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907774283410-bkiu4jval40a4n9brt7elgubsv3vi808.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dmatilla.products_app",
+            "certificate_hash": "3b6c02725a3934a0abb57151bff839b4b13402a3"
+          }
+        },
+        {
+          "client_id": "907774283410-pm2n96ovsd2d8e74rcml58tdkv5itk9c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwC7HooV2EDV94a4HdYBU95sW1AWnxTCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907774283410-pm2n96ovsd2d8e74rcml58tdkv5itk9c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

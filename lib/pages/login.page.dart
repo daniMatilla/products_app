@@ -12,9 +12,23 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider<LoginProvider>(
+      create: (_) => LoginProvider(),
+      child: const LoginBody(),
+    );
+  }
+}
+
+class LoginBody extends StatelessWidget {
+  const LoginBody({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final double heightHeader = size.height * .4;
     ScrollController _scrollController = ScrollController();
+
+    final _loginProvider = Provider.of<LoginProvider>(context);
 
     return Scaffold(
       body: Stack(
@@ -44,19 +58,19 @@ class LoginPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: ChangeNotifierProvider<LoginProvider>(
-                    create: (_) => LoginProvider(),
-                    child: const _Form(),
-                  ),
+                  child: const _Form(),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 24),
                   child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Crear una cuenta nueva',
+                    onPressed: () => _loginProvider.isLoginPage =
+                        !_loginProvider.isLoginPage,
+                    child: Text(
+                      _loginProvider.isLoginPage
+                          ? 'Crear cuenta nueva'
+                          : '¿Ya tienes una cuenta?',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.black.withOpacity(.4),
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -77,17 +91,17 @@ class _Form extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginProvider>(context);
+    final _loginProvider = Provider.of<LoginProvider>(context);
 
     return Form(
-      key: loginProvider.key,
+      key: _loginProvider.key,
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 16.0),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
             child: Text(
-              'Login',
-              style: TextStyle(
+              _loginProvider.isLoginPage ? 'Login' : 'Crear cuenta',
+              style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.teal),
@@ -100,7 +114,7 @@ class _Form extends StatelessWidget {
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
-                loginProvider.email = value;
+                _loginProvider.email = value;
               },
               validator: (value) {
                 return value != null && value == 'dmatilla@email.com'
@@ -120,7 +134,7 @@ class _Form extends StatelessWidget {
               keyboardType: TextInputType.visiblePassword,
               obscureText: true,
               onChanged: (value) {
-                loginProvider.password = value;
+                _loginProvider.password = value;
               },
               validator: (value) {
                 return (value != null && value.length >= 6)
@@ -138,24 +152,32 @@ class _Form extends StatelessWidget {
             minWidth: double.infinity,
             height: 50,
             elevation: 0,
-            onPressed: loginProvider.isBusy
+            onPressed: _loginProvider.isBusy
                 ? null
-                : () async {
-                    if (!loginProvider.isValid()) return;
+                : _loginProvider.isLoginPage
+                    ? () async {
+                        if (!_loginProvider.isValid()) return;
 
-                    FocusScope.of(context).unfocus();
+                        FocusScope.of(context).unfocus();
 
-                    await loginProvider.working(
-                      Future.delayed(
-                        const Duration(seconds: 2),
-                      ),
-                    );
+                        await _loginProvider.working(
+                          Future.delayed(
+                            const Duration(seconds: 2),
+                          ),
+                        );
 
-                    Navigator.pushReplacementNamed(
-                        context, ProductsPage.routeName);
-                  },
+                        Navigator.pushReplacementNamed(
+                            context, ProductsPage.routeName);
+                      }
+                    : () {
+                        print('Registrando cuenta...');
+                      },
             child: Text(
-              loginProvider.isBusy ? 'Espera...' : 'Ingresar',
+              _loginProvider.isBusy
+                  ? 'Espera...'
+                  : _loginProvider.isLoginPage
+                      ? 'Ingresar'
+                      : 'Crear cuenta',
               style: const TextStyle(fontSize: 18),
             ),
           )
